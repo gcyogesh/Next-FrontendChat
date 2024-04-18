@@ -1,9 +1,51 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { signIn } from 'next-auth/react'
+import { document } from 'postcss'
 
 const RegisterForm = () => {
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  console.log("name", name)
+  
+  const handleSubmit = async(e)=>{
+    e.preventDefault();
+
+    if(!name || !email || !password){
+       alert("all field are necessary")
+       return;
+    }
+    try{
+      const res = await fetch('api/register', {
+        method :"POST",
+        headers:{
+          "Content-Type":"application/json",
+
+        },
+        body:JSON.stringify({
+          name, email, password
+        })
+      })
+
+      if(res.ok){
+        const form = e.target;
+        form.reset();
+      }else{
+        console.log("user register failed")
+      }
+
+    }catch(error){
+      console.log("Error during register", error)
+     
+    }
+
+    
+
+  }
 
   const handleGoogle =()=>{
     signIn('google', {callbackUrl:"/home"});
@@ -19,23 +61,26 @@ const RegisterForm = () => {
   <p className="text-xs mt-4 text-[#002D74]">
     Create a new account to get started
   </p>
-  <form  className="flex flex-col gap-4">
+  <form onSubmit={handleSubmit}  className="flex flex-col gap-4">
     <input
       className="p-2 mt-8 rounded-xl border"
       type="text"
       name="UserName"
       placeholder="UserName"
+      onChange={e=> setName(e.target.value)}
     />
     <input
       className="p-2 rounded-xl border"
       name="email"
       placeholder="Email"
+      onChange={(e)=> setEmail(e.target.value)}
     />
     <div className="relative">
       <input
         className="p-2 rounded-xl border w-full"
         name="password"
         placeholder="Password"
+        onChange={(e)=> setPassword(e.target.value)}
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"

@@ -11,7 +11,8 @@ const SideChat = () => {
  
 
   const {data:session,status} = useSession();
-  console.log(session?.user?.image)
+  console.log(session)
+  // console.log(session?.user?.image)
 
   const handleSignout = ()=>{
     Swal.fire({
@@ -42,7 +43,7 @@ const SideChat = () => {
           <div className="flex items-center mb-4 cursor-pointer hover:bg-gray-100 p-2 rounded-md" >
             <div className="w-12 h-12 bg-gray-300 rounded-full mr-3">
               <img
-                src={session?.user?.image ?? '/default-avatar.png'} 
+                 src={session?.user?.image ?? "" } 
                 alt="User Avatar"
                 className="w-12 h-12 rounded-full"
               />
